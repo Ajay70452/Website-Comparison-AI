@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Visual Comparator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>AI Visual Comparator</h1>
+        <p>Enter a "before" and "after" URL to get an AI-powered analysis of the visual differences.</p>
+        
+        <form id="url-form">
+            <div class="form-group">
+                <label for="url_a">URL A (Before):</label>
+                <input type="url" id="url_a" name="url_a" placeholder="https://example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="url_b">URL B (After):</label>
+                <input type="url" id="url_b" name="url_b" placeholder="https://staging.example.com" required>
+            </div>
+            <button type="submit" id="submit-button">Analyze Differences</button>
+        </form>
+
+        <div id="loading-indicator" style="display: none;">
+            <p>Analyzing... This may take up to 30 seconds.</p>
+            <div class="spinner"></div>
+        </div>
+        
+        <div id="results-container">
+            <h2>Analysis Report</h2>
+            <pre id="results-content">Your analysis will appear here...</pre>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
