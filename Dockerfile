@@ -60,4 +60,4 @@ RUN playwright install chromium
 COPY . .
 
 # 8. Define the command to run your app.
-CMD gunicorn -w 2 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:${PORT}
+CMD gunicorn -w 2 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:${PORT} --timeout 180
