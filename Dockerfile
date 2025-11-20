@@ -35,6 +35,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 6. Install the Playwright browsers (CRITICAL: MUST run as root)
 # The --with-deps flag ensures all necessary system dependencies are linked correctly.
+ENV PLAYWRIGHT_BROWSERS_PATH=/usr/local/bin/ms-playwright
+
 RUN python -m playwright install --with-deps chromium
 
 # 7. Create and switch to the unprivileged user for runtime security.
