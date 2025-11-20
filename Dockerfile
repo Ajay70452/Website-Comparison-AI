@@ -54,7 +54,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 6. Install ONLY the Chromium browser to save space.
-RUN playwright install chromium
+RUN python -m playwright install --with-deps chromium
 
 # 7. Copy your application code into the container.
 COPY . .
