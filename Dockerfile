@@ -1,5 +1,5 @@
 # 1. Base Image: Use a modern, slim Python version.
-FROM python:3.10-slim-buster
+FROM python:3.10-slim-bookworm
 
 # 2. Set Environment Variables for a smoother build process.
 ENV PYTHONUNBUFFERED=1
