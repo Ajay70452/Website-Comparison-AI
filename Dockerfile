@@ -1,10 +1,14 @@
-# 1. Base Image: Use a modern, slim Python version.
+# 1. Base Image: Use a supported Python version.
 FROM python:3.10-slim-bookworm
 
-# 2. Set Environment Variables for a smoother build process.
+# 2. Set Environment Variables
 ENV PYTHONUNBUFFERED=1
 
-# 3. Install Playwright's system dependencies (using the official Playwright base image list)
+# 3. Set the Working Directory
+WORKDIR /app
+
+# 4. Install Dependencies as ROOT (Critical for Playwright's system deps)
+# We do this before switching to the unprivileged user.
 RUN apt-get update && apt-get install -y \
     python3-pip \
     libnss3 \
@@ -25,22 +29,20 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# 4. Set the working directory, create a non-root user for security
-WORKDIR /app
-RUN useradd -m appuser
-USER appuser
-
-# 5. Copy and install Python dependencies.
+# 5. Copy requirements and install Python packages (still as root)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 6. Install the Playwright browsers (we will use the simple command which is now robust)
+# 6. Install the Playwright browsers (CRITICAL: MUST run as root)
+# The --with-deps flag ensures all necessary system dependencies are linked correctly.
 RUN python -m playwright install --with-deps chromium
 
-# 7. Copy your application code into the container.
-COPY . .
+# 7. Create and switch to the unprivileged user for runtime security.
+RUN useradd -m appuser
+USER appuser
 
-# 8. Define the command to run your app.
-# We simplify the CMD to directly run the app with Uvicorn, which is safer on App Platform.
-# The ${PORT} variable is automatically injected by DO.
+# 8. Copy your application code (now as the unprivileged user)
+COPY --chown=appuser:appuser . .
+
+# 9. Define the command to run your app.
 CMD uvicorn main:app --host 0.0.0.0 --port ${PORT}
