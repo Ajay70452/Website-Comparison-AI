@@ -4,4 +4,3 @@ playwright
 openai
 python-dotenv
 python-multipart
-gunicorn
